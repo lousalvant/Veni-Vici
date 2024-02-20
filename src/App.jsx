@@ -13,46 +13,51 @@ const App = () => {
 
   const fetchCatData = async () => {
     try {
-      const response = await fetch(`https://api.thecatapi.com/v1/images/search?size=med&mime_types=jpg&format=json&has_breeds=true&order=RANDOM&page=0&limit=1&api_key=${ACCESS_Key}`);
-      const data = await response.json();
+      let catWithBreedData;
   
-      if (data && data.length > 0) {
-        const catId = data[0].id;
+      do {
+        const response = await fetch(`https://api.thecatapi.com/v1/images/search?size=med&mime_types=jpg&format=json&has_breeds=true&order=RANDOM&page=0&limit=1&api_key=${ACCESS_Key}`);
+        const data = await response.json();
   
-        // Fetch additional breed information using the cat's ID
-        const breedResponse = await fetch(`https://api.thecatapi.com/v1/images/${catId}`);
-        const breedData = await breedResponse.json();
+        if (data && data.length > 0) {
+          const catId = data[0].id;
   
-        if (breedData && breedData.breeds && breedData.breeds.length > 0) {
-          // Combine image and breed information
-          const catDataWithBreed = {
-            ...data[0],
-            breeds: breedData.breeds,
-          };
+          // Fetch additional breed information using the cat's ID
+          const breedResponse = await fetch(`https://api.thecatapi.com/v1/images/${catId}`);
+          const breedData = await breedResponse.json();
   
-          setCatData(catDataWithBreed);
+          if (breedData && breedData.breeds && breedData.breeds.length > 0) {
+            // Combine image and breed information
+            catWithBreedData = {
+              ...data[0],
+              breeds: breedData.breeds,
+            };
+          } else {
+            console.error('No breed data found.');
+          }
         } else {
-          console.error('No breed data found.');
+          console.error('No cat data found.');
         }
-      } else {
-        console.error('No cat data found.');
-      }
+      } while (catWithBreedData && catWithBreedData.breeds.some(breed => banList.includes(breed.origin)));
+  
+      setCatData(catWithBreedData);
     } catch (error) {
       console.error('Error fetching cat data:', error);
     }
-  };
-  
-  
+  };  
 
   const handleDiscoverClick = () => {
     fetchCatData();
   };
 
-  const handleAttributeClick = (attribute) => {
-    if (!banList.includes(attribute)) {
-      setBanList([...banList, attribute]);
+  const handleAttributeClick = (attributeType, attributeValue) => {
+    // Check if the attribute value is not already in the ban list
+    if (!banList.includes(attributeValue)) {
+      setBanList([...banList, attributeValue]);
     }
   };
+  
+  
 
   useEffect(() => {
     if (catData) {

@@ -10,11 +10,12 @@ const CatDisplay = ({ catData, onAttributeClick, onDiscoverClick }) => {
           <p>{catData.name ? `A ${catData.name} cat` : 'A cat'}</p>
           <img src={catData.url} alt="Cat" style={{ width: '100%', maxWidth: '400px' }} />
           <ul>
-            <li onClick={() => onAttributeClick('name')}>{catData.breeds[0].name}</li>
-            <li onClick={() => onAttributeClick('origin')}>{catData.breeds[0].origin}</li>
-            <li onClick={() => onAttributeClick('weight')}>{catData.breeds[0].weight?.imperial} lbs</li>
-            <li onClick={() => onAttributeClick('life_span')}>{catData.breeds[0].life_span} years</li>
+            <li onClick={() => onAttributeClick('name', catData.breeds[0].name)}>{catData.breeds[0].name}</li>
+            <li onClick={() => onAttributeClick('origin', catData.breeds[0].origin)}>{catData.breeds[0].origin}</li>
+            <li onClick={() => onAttributeClick('weight', catData.breeds[0].weight?.imperial)}>{catData.breeds[0].weight?.imperial} lbs</li>
+            <li onClick={() => onAttributeClick('life_span', catData.breeds[0].life_span)}>{catData.breeds[0].life_span} years</li>
           </ul>
+
         </>
       )}
       <button onClick={onDiscoverClick}>Discover</button>
