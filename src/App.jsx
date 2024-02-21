@@ -68,7 +68,6 @@ const App = () => {
   return (
     <div className="App">
       <header className="header">
-        <h1>Cat Discovery App</h1>
       </header>
       <div className="container">
         <div className="left-panel">
