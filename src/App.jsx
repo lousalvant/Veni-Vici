@@ -51,13 +51,21 @@ const App = () => {
   };
 
   const handleAttributeClick = (attributeType, attributeValue) => {
-    // Check if the attribute value is not already in the ban list
-    if (!banList.includes(attributeValue)) {
-      setBanList([...banList, attributeValue]);
+    // Check if the attribute type is 'weight' or 'life_span'
+    if (attributeType === 'weight' || attributeType === 'life_span') {
+      // Append the attribute type along with the value to the ban list
+      const fullAttribute = `${attributeType}: ${attributeValue}`;
+      // Check if the full attribute is not already in the ban list
+      if (!banList.includes(fullAttribute)) {
+        setBanList([...banList, fullAttribute]);
+      }
+    } else {
+      // For other attribute types, directly append the value to the ban list
+      if (!banList.includes(attributeValue)) {
+        setBanList([...banList, attributeValue]);
+      }
     }
   };
-  
-  
 
   useEffect(() => {
     if (catData) {
